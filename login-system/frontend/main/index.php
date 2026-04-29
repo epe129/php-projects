@@ -1,4 +1,10 @@
-<?php require "../data/handleLogin.php"; ?>
+<?php 
+require "../data/handleLogin.php"; 
+if (!isset($_SESSION['name'])) {
+    header("Location: ../index.php");
+    exit();
+}
+?>
 <html>
     <head>
         <meta charset="UTF-8">

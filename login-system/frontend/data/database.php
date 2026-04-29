@@ -1,5 +1,5 @@
 <?php
-$configs = include('../config.php');
+$configs = include('C:\xampp\htdocs\php-projects\login-system\frontend\data\config.php');
 $dbservername = $configs['dbservername'];
 $dbusername = $configs['dbusername'];
 $dbpassword = $configs['dbpassword'];
