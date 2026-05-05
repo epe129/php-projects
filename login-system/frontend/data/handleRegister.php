@@ -19,13 +19,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($name) or empty($email) or empty($password)) {
         echo "<h1>Jokin kohta oli tyhjä</h1>";
     } else {
-        $sql = "INSERT INTO mydata (fname, email, pword) VALUES ('$name', '$email', MD5('$password'))";
-        if ($conn->query($sql) === TRUE) {
-            $_SESSION["name"] = "$name";
-            header("Location: ../main/index.php"); 
+        $stmt = $conn->prepare("INSERT INTO mydata (fname, email, pword) VALUES (?, ?, MD5(?))");
+        $stmt->bind_param("sss", $name, $email, $password);
+        if ($stmt->execute()) {
+            $_SESSION["name"] = $name;
+            header("Location: ../main/index.php");
             exit;
-        } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
-        }
+            } else {
+                echo "Error: " . $stmt->error;
+         }
     }
 }
