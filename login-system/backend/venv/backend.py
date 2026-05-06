@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 import mysql.connector
 import config
 
@@ -24,16 +25,18 @@ dbresult = cursor.fetchall()
 
 print(dbresult)
 
-def delete_user(email):
-  print(email)
+def delete_user():
+  email = lbl.get()
+  print(email, "deleted")
   cursor.execute("DELETE FROM mydata WHERE email = %s", (email,))
   mydb.commit()
 
-for c in dbresult:
-  lbl = tk.Label(root, text=f"{c}")
-  btn = tk.Button(root, text='delete user', command=lambda email=c[1]: delete_user(email))
-  lbl.pack()
-  btn.pack(side='top')
+n = tk.StringVar()
+lbl = ttk.Combobox(root, textvariable=n)
+lbl['values'] = [i[1] for i in dbresult]
+btn = tk.Button(root, text='delete user', command=delete_user)
+lbl.pack()
+btn.pack(side='top')
 
 root.mainloop()
 
