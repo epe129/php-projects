@@ -1,30 +1,37 @@
 <?php
-session_start();
-$configs = include('C:\xampp\htdocs\php-projects\login-system\frontend\data\config.php');
-$name = "";
-$email = "";
-$password = "";
-$dbservername = $configs['dbservername'];
-$dbusername = $configs['dbusername'];
-$dbpassword = $configs['dbpassword'];
-$dbname = $configs['dbname'];
-$conn = new mysqli($dbservername, $dbusername, $dbpassword, $dbname);
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
-}
+$configs = include('database.php');
+$name = $email = $password = "";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = htmlspecialchars($_POST["name"]);
+    $email = htmlspecialchars($_POST["email"]);
     $password = htmlspecialchars($_POST["password"]);
-    if ($name != "" and $password != "") {        
-        $sql = "SELECT * FROM mydata WHERE fname = '$name' AND pword = MD5('$password')";
-        $result = $conn->query($sql);
-        if ($result->num_rows > 0) {
-            $_SESSION["name"] = "$name";
+
+    $stmt = $conn->prepare("SELECT pword FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $stmt->store_result();
+
+    if ($stmt->num_rows > 0) {
+        $stmt->bind_result($db_password);
+        $stmt->fetch();
+
+        if (password_verify($password, $db_password)) {
+            $stmt2 = $conn->prepare("SELECT nimi FROM users WHERE email = ?");
+            $stmt2->bind_param("s", $email);
+            $stmt2->execute();
+            $stmt2->bind_result($name);
+            $stmt2->fetch();
+            
+            session_start();
+            $_SESSION['email'] = $email;
+            $_SESSION['name'] = $name;
             header("Location: ../main/index.php"); 
-            exit;
+            exit();
         } else {
-            echo "<h1>Invalid email or password</h1>";
+            echo "Incorrect password";
         }
-    }   
+    } else {
+        echo "Email not found";
+    }
 }
 ?>

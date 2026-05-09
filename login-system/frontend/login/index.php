@@ -39,7 +39,8 @@
         }
 
         input[type="text"],
-        input[type="password"]  {
+        input[type="password"],
+        input[type="email"] {
             width: 100%;
             padding: 12px;
             margin-bottom: 20px;
@@ -50,7 +51,8 @@
         }
 
         input[type="text"]:focus,
-        input[type="password"]:focus {
+        input[type="password"]:focus,
+        input[type="email"]:focus {
             outline: none;
             border-color: #007bff;
             box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
@@ -88,8 +90,8 @@
     <form action="../data/handleLogin.php" method="POST">
         <h1>Log in</h1>
         <br>
-        <label>name</label>
-        <input type="text" name="name" require>
+        <label>email</label>
+        <input type="email" name="email" require>
         <br>
         <label>password</label>
         <input type="password" name="password" require>
