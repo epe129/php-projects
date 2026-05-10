@@ -21,17 +21,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt2->execute();
             $stmt2->bind_result($name);
             $stmt2->fetch();
-            
             session_start();
             $_SESSION['email'] = $email;
             $_SESSION['name'] = $name;
+            $conn->close();
             header("Location: ../main/index.php"); 
             exit();
         } else {
-            echo "Incorrect password";
+            $conn->close();
+            header("Location: ../login/index.php"); 
+            exit();
         }
     } else {
-        echo "Email not found";
+        $conn->close();
+        header("Location: ../login/index.php"); 
+        exit();
     }
 }
 ?>

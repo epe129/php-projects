@@ -14,7 +14,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     if ($checkEmailStmt->num_rows > 0) {
-        echo "Email ID already exists";
+        header("Location: ../index.php"); 
+        exit();
     } else {
         $stmt = $conn->prepare("INSERT INTO users (nimi, email, pword) VALUES (?, ?, ?)");
         $stmt->bind_param("sss", $name, $email, $hashedPassword);
@@ -23,13 +24,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             session_start();
             $_SESSION['email'] = $email;
             $_SESSION['name'] = $name;
+            $conn->close();
             header("Location: ../main/index.php"); 
             exit();
         } else {
-            echo "Error: " . $stmt->error;
+            $conn->close();
+            header("Location: ../index.php"); 
+            exit();
         }
-
-        $stmt->close();
     }
-
 }
