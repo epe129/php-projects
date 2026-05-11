@@ -1,3 +1,14 @@
+<?php
+   session_start();
+   if(!isset($_SESSION["csrf_token"])) {
+    // No token present, generate a new one
+    $token = md5(uniqid(rand(), true));
+    $_SESSION["csrf_token"] = $token;
+   } else {
+    // Reuse the token
+    $token = $_SESSION["csrf_token"];        
+   }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -88,6 +99,7 @@
 </head>
 <body>
     <form action="../data/handleLogin.php" method="POST">
+        <input type="hidden" name="csrf_token" value="<?php echo $token;?>" />
         <h1>Log in</h1>
         <br>
         <label>email</label>
