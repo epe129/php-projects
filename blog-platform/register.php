@@ -8,6 +8,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($username === '' || $password === '') {
         $message = 'Please enter both username and password.';
+    } elseif (!ctype_alnum($username)) {
+        $message = 'Username can only contain letters and numbers.';
     } else {
         $stmt = $mysqli->prepare('SELECT id FROM users WHERE username = ?');
         $stmt->bind_param('s', $username);
@@ -38,13 +40,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <title>Register | Vlog App</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 40px; }
-        .container { max-width: 400px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        input[type=text], input[type=password] { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px; }
-        button { width: 100%; padding: 10px; background: #007bff; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
-        button:hover { background: #0056b3; }
-        .message { margin: 10px 0; color: #d8000c; }
-        .small { font-size: 0.9em; margin-top: 10px; }
+        body { 
+            font-family: Arial, sans-serif; 
+            background: #f4f4f4; 
+            margin: 0; 
+            padding: 40px; 
+        }
+        .container { 
+            max-width: 400px; 
+            margin: 0 auto; background: 
+            #fff; padding: 20px; 
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+        }
+        input[type=text], input[type=password] { 
+            width: 100%; 
+            padding: 10px; 
+            margin: 8px 0; 
+            border: 1px solid #ccc; 
+            border-radius: 4px; }
+        button { 
+            width: 100%; 
+            padding: 10px; background: #007bff; 
+            color: #fff; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+        }
+        button:hover { 
+            background: #0056b3; 
+        }
+        .message { 
+            margin: 10px 0; 
+            color: #d8000c; 
+        }
+        .small { 
+            font-size: 0.9em; 
+            margin-top: 10px; 
+        }
     </style>
 </head>
 <body>
@@ -62,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <button type="submit">Create Account</button>
         </form>
-        <p class="small">Already have an account? <a href="login.php">Login here</a>.</p>
+        <p class="small">Already have an account? <a href="login.php">Login here</a></p>
     </div>
 </body>
 </html>

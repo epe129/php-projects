@@ -42,27 +42,83 @@ $stmt->close();
     <meta charset="UTF-8">
     <title>Your Vlogs | Vlog App</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f8f9fa; color: #333; margin: 0; padding: 0; }
-        .header { background: #343a40; color: #fff; padding: 20px; }
-        .content { max-width: 900px; margin: 20px auto; padding: 20px; }
-        .card { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        input[type=text], textarea { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px; }
-        textarea { min-height: 120px; }
-        button { padding: 10px 18px; background: #007bff; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
-        button:hover { background: #0056b3; }
-        .message { margin-bottom: 16px; color: #d8000c; }
-        .vlog-item { margin-bottom: 16px; }
-        .vlog-item h3 { margin: 0 0 8px; }
-        .vlog-item small { color: #666; }
-        .top-bar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
-        .top-bar a { color: #fff; text-decoration: none; background: #dc3545; padding: 10px 14px; border-radius: 4px; }
+        body { 
+            font-family: Arial, sans-serif; 
+            background: #f8f9fa; color: #333; 
+            margin: 0; 
+            padding: 0; 
+        }
+        .header { 
+            background: #343a40; 
+            color: #fff; 
+            padding: 20px; 
+        }
+        .content { 
+            max-width: 900px; 
+            margin: 20px auto; 
+            padding: 20px; 
+        }
+        .card { 
+            background: #fff; 
+            border-radius: 8px; 
+            padding: 20px; 
+            margin-bottom: 20px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
+        }
+        input[type=text], textarea { 
+            width: 100%; 
+            padding: 10px;
+            margin: 8px 0; 
+            border: 1px solid #ccc; 
+            border-radius: 4px; 
+        }
+        textarea { 
+            min-height: 120px; 
+        }
+        button { 
+            padding: 10px 18px; 
+            background: #007bff; 
+            color: #fff; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+        }
+        button:hover { 
+            background: #0056b3; 
+        }
+        .message { 
+            margin-bottom: 16px; 
+            color: #d8000c; 
+        }
+        .vlog-item { 
+            margin-bottom: 16px; 
+        }
+        .vlog-item h3 { 
+            margin: 0 0 8px; 
+        }
+        .vlog-item small { 
+            color: #666; 
+        }
+        .top-bar { 
+            display: flex;
+            align-items: center; 
+            justify-content: space-between; 
+            flex-wrap: wrap; 
+            gap: 10px; 
+        }
+        .top-bar a { 
+            color: #fff; 
+            text-decoration: none; 
+            background: #dc3545; 
+            padding: 10px 14px; 
+            border-radius: 4px; 
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <div class="top-bar">
             <div>
-                <h1>Your Vlogs</h1>
                 <p>Welcome, <?= htmlspecialchars($_SESSION['username']) ?>.</p>
             </div>
             <a href="logout.php">Logout</a>

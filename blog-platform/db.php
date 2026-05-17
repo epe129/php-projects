@@ -17,7 +17,5 @@ $createVlogs = "CREATE TABLE IF NOT EXISTS vlogs (
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 )";
-if ($mysqli->query($createUsers)) {
-}
-if ($mysqli->query($createVlogs)) {
+if ($mysqli->query($createUsers) and $mysqli->query($createVlogs)) {
 }
