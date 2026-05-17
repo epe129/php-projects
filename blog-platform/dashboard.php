@@ -10,24 +10,26 @@ $userId = $_SESSION['user_id'];
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $title = trim($_POST['title'] ?? '');
-    $content = trim($_POST['content'] ?? '');
+    $title = trim($_POST['title']);
+    $content = trim($_POST['content']);
+    $isPublicRaw = $_POST['is_public'] ?? 'false';
+    $isPublic = $isPublicRaw === 'true' ? 1 : 0;
 
-    if ($title === '' || $content === '') {
-        $message = 'Please enter both a title and content for your vlog.';
+    if (empty($title) || empty($content)) {
+        $message = 'Please enter both a title and content for your blog.';
     } else {
-        $insert = $mysqli->prepare('INSERT INTO vlogs (user_id, title, content) VALUES (?, ?, ?)');
-        $insert->bind_param('iss', $userId, $title, $content);
+        $insert = $mysqli->prepare('INSERT INTO blogs (user_id, title, content, is_public) VALUES (?, ?, ?, ?)');
+        $insert->bind_param('issi', $userId, $title, $content, $isPublic);
         if ($insert->execute()) {
             header('Location: dashboard.php');
             exit;
         }
-        $message = 'Unable to save vlog. Please try again.';
+        $message = 'Unable to save blog. Please try again.';
     }
 }
 
 $vlogs = [];
-$stmt = $mysqli->prepare('SELECT id, title, content, created_at FROM vlogs WHERE user_id = ? ORDER BY created_at DESC');
+$stmt = $mysqli->prepare('SELECT id, title, content, created_at, is_public FROM blogs WHERE user_id = ? ORDER BY created_at DESC');
 $stmt->bind_param('i', $userId);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -40,18 +42,13 @@ $stmt->close();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Your Vlogs | Vlog App</title>
+    <title>Your Blogs | Blog App</title>
     <style>
         body { 
             font-family: Arial, sans-serif; 
             background: #f8f9fa; color: #333; 
             margin: 0; 
             padding: 0; 
-        }
-        .header { 
-            background: #343a40; 
-            color: #fff; 
-            padding: 20px; 
         }
         .content { 
             max-width: 900px; 
@@ -99,34 +96,52 @@ $stmt->close();
         .vlog-item small { 
             color: #666; 
         }
-        .top-bar { 
-            display: flex;
-            align-items: center; 
-            justify-content: space-between; 
-            flex-wrap: wrap; 
-            gap: 10px; 
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333333;
         }
-        .top-bar a { 
-            color: #fff; 
-            text-decoration: none; 
-            background: #dc3545; 
-            padding: 10px 14px; 
-            border-radius: 4px; 
+
+        ul li {
+            float: left;
+        }
+
+        ul li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        ul li div {
+            display: flex;
+            justify-content: center;
+        }
+        ul li div {
+            margin: 0;
+        }
+        ul li div {
+            border-radius: 4px;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="top-bar">
+    <ul>
+        <li><a href="dashboard.php">Home</a></li>
+        <li><a href="AllBlogs.php">Others blog</a></li>
+        <li style="float:right">
             <div>
-                <p>Welcome, <?= htmlspecialchars($_SESSION['username']) ?>.</p>
+                <a>Welcome, <?= htmlspecialchars($_SESSION['username']) ?>.</a>
+                <a style="background: #dc3545;" href="logout.php">Logout</a>
             </div>
-            <a href="logout.php">Logout</a>
-        </div>
-    </div>
+        </li>
+    </ul>
     <div class="content">
         <div class="card">
-            <h2>Write a new vlog</h2>
+            <h2>Write a new blog</h2>
             <?php if ($message): ?>
                 <div class="message"><?= htmlspecialchars($message) ?></div>
             <?php endif; ?>
@@ -135,19 +150,26 @@ $stmt->close();
                 <input type="text" id="title" name="title" required>
                 <label for="content">Content</label>
                 <textarea id="content" name="content" required></textarea>
-                <button type="submit">Save Vlog</button>
+                <br/>
+                <div class="field-group">
+                    <span>Public</span>
+                    <label><input type="radio" name="is_public" value="true"> true</label>
+                    <label><input type="radio" name="is_public" value="false"> false</label>
+                </div>
+                <br/>
+                <button type="submit">Save blog</button>
             </form>
         </div>
 
         <div class="card">
-            <h2>Your previous vlogs</h2>
+            <h2>Your previous blogs</h2>
             <?php if (count($vlogs) === 0): ?>
-                <p>You have not written any vlogs yet.</p>
+                <p>You have not written any blogs yet.</p>
             <?php else: ?>
                 <?php foreach ($vlogs as $vlog): ?>
                     <div class="vlog-item">
                         <h3><?= htmlspecialchars($vlog['title']) ?></h3>
-                        <small>Created on <?= htmlspecialchars($vlog['created_at']) ?></small>
+                        <small>Created on <?= htmlspecialchars($vlog['created_at']) ?> | Public: <?= $vlog['is_public'] ? 'true' : 'false' ?></small>
                         <p><?= nl2br(htmlspecialchars($vlog['content'])) ?></p>
                     </div>
                 <?php endforeach; ?>

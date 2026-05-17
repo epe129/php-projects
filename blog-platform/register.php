@@ -4,25 +4,28 @@ require_once 'db.php';
 $message = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username'] ?? '');
+    $email = trim($_POST['email'] ?? '');
     $password = trim($_POST['password'] ?? '');
 
-    if ($username === '' || $password === '') {
-        $message = 'Please enter both username and password.';
+    if ($username === '' || $email === '' || $password === '') {
+        $message = 'Please enter username, email, and password.';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $message = 'Please enter a valid email address.';
     } elseif (!ctype_alnum($username)) {
         $message = 'Username can only contain letters and numbers.';
     } else {
-        $stmt = $mysqli->prepare('SELECT id FROM users WHERE username = ?');
-        $stmt->bind_param('s', $username);
+        $stmt = $mysqli->prepare('SELECT id FROM users WHERE email = ?');
+        $stmt->bind_param('s', $email);
         $stmt->execute();
         $stmt->store_result();
 
         if ($stmt->num_rows > 0) {
-            $message = 'Username already exists. Choose another one.';
+            $message = 'Email already registered. Use a different address.';
         } else {
             $stmt->close();
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-            $insert = $mysqli->prepare('INSERT INTO users (username, pword) VALUES (?, ?)');
-            $insert->bind_param('ss', $username, $hashedPassword);
+            $insert = $mysqli->prepare('INSERT INTO users (username, email, pword) VALUES (?, ?, ?)');
+            $insert->bind_param('sss', $username, $email, $hashedPassword);
             if ($insert->execute()) {
                 header('Location: login.php');
                 exit;
@@ -38,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Register | Vlog App</title>
+    <title>Register | blog App</title>
     <style>
         body { 
             font-family: Arial, sans-serif; 
@@ -89,6 +92,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form method="POST" action="register.php">
             <label for="username">Username</label>
             <input type="text" id="username" name="username" required>
+
+            <label for="email">Email</label>
+            <input type="text" id="email" name="email" required>
 
             <label for="password">Password</label>
             <input type="password" id="password" name="password" required>

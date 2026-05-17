@@ -4,18 +4,18 @@ require_once 'db.php';
 
 $message = $hashedPassword = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = trim($_POST['username']);
+    $email = trim($_POST['email']);
     $password = trim($_POST['password']);
 
-    if ($username === '' || $password === '') {
-        $message = 'Please enter both username and password.';
-    } elseif (!ctype_alnum($username)) {
-        $message = 'Username can only contain letters and numbers.';
+    if ($email === '' || $password === '') {
+        $message = 'Please enter both email and password.';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $message = 'Please enter a valid email address.';
     } else {
-        $stmt = $mysqli->prepare('SELECT id, pword FROM users WHERE username = ?');
-        $stmt->bind_param('s', $username);
+        $stmt = $mysqli->prepare('SELECT id, username, pword FROM users WHERE email = ?');
+        $stmt->bind_param('s', $email);
         $stmt->execute();
-        $stmt->bind_result($userId, $hashedPassword);
+        $stmt->bind_result($userId, $username, $hashedPassword);
 
         if ($stmt->fetch() && password_verify($password, $hashedPassword)) {
             $_SESSION['user_id'] = $userId;
@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
-        $message = 'Invalid username or password.';
+        $message = 'Invalid email or password.';
         $stmt->close();
     }
 }
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login | Vlog App</title>
+    <title>Login | Blog App</title>
     <style>
         body { 
             font-family: Arial, sans-serif; 
@@ -85,8 +85,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="message"><?= htmlspecialchars($message) ?></div>
         <?php endif; ?>
         <form method="POST" action="login.php">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" required>
+            <label for="email">Email</label>
+            <input type="text" id="email" name="email" required>
 
             <label for="password">Password</label>
             <input type="password" id="password" name="password" required>
