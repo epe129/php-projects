@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $message = 'Please enter a valid email address.';
     } else {
-        $stmt = $mysqli->prepare('SELECT id, username, pword FROM users WHERE email = ?');
+        $stmt = $conn->prepare('SELECT id, username, pword FROM users WHERE email = ?');
         $stmt->bind_param('s', $email);
         $stmt->execute();
         $stmt->bind_result($userId, $username, $hashedPassword);

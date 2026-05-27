@@ -14,17 +14,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (!ctype_alnum($username)) {
         $message = 'Username can only contain letters and numbers.';
     } else {
-        $stmt = $mysqli->prepare('SELECT id FROM users WHERE email = ?');
+        $stmt = $conn->prepare('SELECT id FROM users WHERE email = ?');
         $stmt->bind_param('s', $email);
         $stmt->execute();
         $stmt->store_result();
-
         if ($stmt->num_rows > 0) {
             $message = 'Email already registered. Use a different address.';
         } else {
             $stmt->close();
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-            $insert = $mysqli->prepare('INSERT INTO users (username, email, pword) VALUES (?, ?, ?)');
+            $insert = $conn->prepare('INSERT INTO users (username, email, pword) VALUES (?, ?, ?)');
             $insert->bind_param('sss', $username, $email, $hashedPassword);
             if ($insert->execute()) {
                 header('Location: login.php');
