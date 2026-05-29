@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($title) || empty($content)) {
         $message = 'Please enter both a title and content for your blog.';
     } else {
-        $insert = $mysqli->prepare('INSERT INTO blogs (user_id, title, content, is_public) VALUES (?, ?, ?, ?)');
+        $insert = $conn->prepare('INSERT INTO blogs (user_id, title, content, is_public) VALUES (?, ?, ?, ?)');
         $insert->bind_param('issi', $userId, $title, $content, $isPublic);
         if ($insert->execute()) {
             header('Location: dashboard.php');
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $vlogs = [];
-$stmt = $mysqli->prepare('SELECT id, title, content, created_at, is_public FROM blogs WHERE user_id = ? ORDER BY created_at DESC');
+$stmt = $conn->prepare('SELECT id, title, content, created_at, is_public FROM blogs WHERE user_id = ? ORDER BY created_at DESC');
 $stmt->bind_param('i', $userId);
 $stmt->execute();
 $result = $stmt->get_result();

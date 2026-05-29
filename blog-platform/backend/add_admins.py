@@ -5,14 +5,14 @@ as it will prompt you for the new admin's username and password."""
 import pymysql
 import bcrypt
 
-connection = pymysql.connect(host="localhost", port=3306, user="root", password="")
+connection = pymysql.connect(host="localhost", port=3306, user="root", password="", database="blog_platform")
 cursor = connection.cursor()
 
 def add_admin(username, password):
     """
     Add a new admin to the database.
     """
-    cursor.execute("INSERT INTO users (username, password) VALUES (%s, %s)", (username, password))
+    cursor.execute("INSERT INTO admins (username, pword) VALUES (%s, %s)", (username, password))
     connection.commit()
     print(f"Admin '{username}' added successfully.")
 
