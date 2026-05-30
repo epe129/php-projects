@@ -74,10 +74,11 @@
         }
 
         .dashboard-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 22px;
+            /* display: grid; */
+            /* grid-template-columns: 2fr 1fr; */
+            /* gap: 22px; */
             margin-top: 28px;
+            width: 100%;
         }
 
         .panel {
@@ -219,24 +220,43 @@
                     </div>
                 </div>  
             </section>
-            <div class="dashboard-grid">
-                <section class="panel">
-                    <h2>Delete Post</h2>
-                    {% for post in posts %}
-                    <form method="POST" action="/delete">
-                        <input type="hidden" name="post_id" value="{{ post[0] }}">
-                        <p>Titled "{{ post[2] }}"?</p>
-                        <p>Author ID: {{ post[1] }}</p>
-                        <p>Content: {{ post[3] }}</p>
-                        <p>Created at: {{ post[4] }}</p>
-                        <p>Post ID: {{ post[0] }}</p>
-                        <button type="submit" class="delete-button">Delete Post</button>
-                    </form>
-                    <br/>
-                    <hr/>
-                    <br/>
-                    {% endfor %}
-                </section>
+            <div style="display: flex; flex-direction: row; width: 100%;">
+                <div class="dashboard-grid">
+                    <section class="panel">
+                        <h2>Delete Post</h2>
+                        {% for post in posts %}
+                        <form method="POST" action="/delete">
+                            <input type="hidden" name="post_id" value="{{ post[0] }}">
+                            <p>Titled "{{ post[2] }}"?</p>
+                            <p>Author ID: {{ post[1] }}</p>
+                            <p>Content: {{ post[3] }}</p>
+                            <p>Created at: {{ post[4] }}</p>
+                            <p>Post ID: {{ post[0] }}</p>
+                            <button type="submit" class="delete-button">Delete Post</button>
+                        </form>
+                        <br/>
+                        <hr/>
+                        <br/>
+                        {% endfor %}
+                    </section>
+                </div>
+                <div class="dashboard-grid">
+                    <section class="panel">
+                        <h2>Delete User</h2>
+                        {% for user in users %}
+                        <form method="POST" action="/delete">
+                            <input type="hidden" name="user_id" value="{{ user[0] }}">
+                            <p>Username: {{ user[1] }}</p>
+                            <p>Email: {{ user[2] }}</p>
+                            <p>User ID: {{ user[0] }}</p>
+                            <button type="submit" class="delete-button">Delete User</button>
+                        </form>
+                        <br/>
+                        <hr/>
+                        <br/>
+                        {% endfor %}
+                    </section>
+                </div>
             </div>
         </div>
     {% endblock %}

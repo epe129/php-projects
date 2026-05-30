@@ -58,10 +58,20 @@ def delete():
     if not session.get("admin") or not session.get("admin_id"):
         return redirect("/")
     
+    if request.method == "POST":
+        post_id = request.form.get("post_id")
+        cursor.execute("SET FOREIGN_KEY_CHECKS=0")    
+        cursor.execute("DELETE FROM blogs WHERE id=%s", (post_id))
+        connection.commit()
+        return redirect("/delete")
+    
     cursor.execute("SELECT id, user_id, title, content, created_at FROM blogs")
     posts = cursor.fetchall()
 
-    return render_template("delete.html", posts=posts)
+    cursor.execute("SELECT id, username, email FROM users")
+    users = cursor.fetchall()
+
+    return render_template("delete.html", posts=posts, users=users)
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
@@ -73,12 +83,14 @@ def login():
         password = request.form.get("password")
         cursor.execute("SELECT * FROM admins WHERE username=%s", (username))
         data = cursor.fetchall()
+    
         if data and bcrypt.checkpw(password.encode('utf-8'), data[0][2].encode('utf-8')):
             session["admin"] = username
             session["admin_id"] = data[0][0]
             return redirect("dashboard")
         else:
             return redirect("/")
+    
     return redirect("/")
 
 if __name__ == '__main__':
