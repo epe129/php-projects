@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Delete</title>
     <style>
         .container {
             width: min(1180px, calc(100% - 32px));
@@ -26,7 +26,6 @@
             flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
-            gap: 16px;
         }
 
         .hero-title {
@@ -72,38 +71,6 @@
         .button:hover,
         .button:focus {
             transform: translateY(-1px);
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 18px;
-            margin-top: 8px;
-        }
-
-        .stat-card {
-            background: #f9fafb;
-            border: 1px solid rgba(148, 163, 184, 0.18);
-            border-radius: 22px;
-            padding: 22px 24px;
-            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.05);
-        }
-
-        .stat-card h3 {
-            margin: 0 0 10px;
-            font-size: 0.95rem;
-            color: #6b7280;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-        }
-
-        .stat-card p {
-            margin: 0;
-            font-size: 2rem;
-            font-weight: 700;
-            color: #111827;
-            line-height: 1;
         }
 
         .dashboard-grid {
@@ -247,48 +214,28 @@
             <section class="hero">
                 <div class="hero-header">
                     <div>
-                        <h1 class="hero-title">Admin Dashboard</h1>
-                        <p class="hero-copy">Monitor blog activity, manage posts, and review key metrics from one polished dashboard interface.</p>
+                        <h1 class="hero-title">Delete</h1>
+                        <p>Delete different data from the system.</p>
                     </div>
-                </div>
-
-                <div class="stats-grid">
-                    <article class="stat-card">
-                        <h3>Total Posts</h3>
-                        <p>{{ posts_total[0][0] }}</p>
-                    </article>
-                    <article class="stat-card">
-                        <h3>Live Comments</h3>
-                        <p></p>
-                    </article>
-                    <article class="stat-card">
-                        <h3>Users</h3>
-                        <p>{{ users[0][0] }}</p>
-                    </article>
-                </div>
+                </div>  
             </section>
-
             <div class="dashboard-grid">
                 <section class="panel">
-                    <h2>Recent posts</h2>
-                    <table class="recent-table">
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Created</th>
-                                <th>Author id</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for post in posts %}
-                            <tr>
-                                <td>{{ post[1] }}</td>
-                                <td>{{ post[3] }}</td>
-                                <td>{{ post[0] }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                    <h2>Delete Post</h2>
+                    {% for post in posts %}
+                    <form method="POST" action="/delete">
+                        <input type="hidden" name="post_id" value="{{ post[0] }}">
+                        <p>Titled "{{ post[2] }}"?</p>
+                        <p>Author ID: {{ post[1] }}</p>
+                        <p>Content: {{ post[3] }}</p>
+                        <p>Created at: {{ post[4] }}</p>
+                        <p>Post ID: {{ post[0] }}</p>
+                        <button type="submit" class="delete-button">Delete Post</button>
+                    </form>
+                    <br/>
+                    <hr/>
+                    <br/>
+                    {% endfor %}
                 </section>
             </div>
         </div>

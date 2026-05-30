@@ -12,11 +12,10 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"     
 Session(app)  
 
-connection = pymysql.connect(host="localhost", port=3306, 
-                            user="root", password="", database="blog_platform")
+connection = pymysql.connect(host="localhost", port=3306, user="root", password="", database="blog_platform")
 cursor = connection.cursor()
 
-@app.route('/', methods=["GET", "POST"])
+@app.route('/', methods=["GET", "POST"])    
 def index():
     """
     index page that allows users to log in.
@@ -34,7 +33,35 @@ def dashboard():
     cursor.execute("SELECT COUNT(*) as total_users FROM users")
     users = cursor.fetchall()
 
-    return render_template("dashboard.html", users=users)
+    cursor.execute("SELECT COUNT(*) as total_posts FROM blogs")
+    posts_total = cursor.fetchall()
+
+    cursor.execute("SELECT user_id, title, content, created_at, is_public FROM blogs")
+    posts = cursor.fetchall()
+
+    return render_template("dashboard.html", users=users, posts_total=posts_total, posts=posts)
+
+@app.route('/settings', methods=["GET", "POST"])
+def settings():
+    """
+    settings page that only admins can access.
+    """
+    if not session.get("admin") or not session.get("admin_id"):
+        return redirect("/")
+    return render_template("settings.html")
+
+@app.route('/delete', methods=["GET", "POST"])
+def delete():
+    """
+    Delete post page.
+    """
+    if not session.get("admin") or not session.get("admin_id"):
+        return redirect("/")
+    
+    cursor.execute("SELECT id, user_id, title, content, created_at FROM blogs")
+    posts = cursor.fetchall()
+
+    return render_template("delete.html", posts=posts)
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
