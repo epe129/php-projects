@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
     <style>
         *, *::before, *::after {
             box-sizing: border-box;
         }
-
         body {
             margin: 0;
             min-height: 100vh;
@@ -16,7 +14,6 @@
             background: linear-gradient(180deg, #eef2ff 0%, #f8fafc 100%);
             color: #1f2937;
         }
-
         body::before {
             content: "";
             position: fixed;
@@ -25,14 +22,12 @@
                         radial-gradient(circle at top right, rgba(16, 185, 129, 0.12), transparent 24%);
             pointer-events: none;
             z-index: -1;
-        }
-        
+        }        
         nav {
             background: #111827;
             padding: 12px 24px;
             box-shadow: 0 20px 60px rgba(15, 23, 42, 0.12);
         }
-
         nav ul {
             display: flex;
             flex-wrap: wrap;
@@ -42,11 +37,9 @@
             margin: 0;
             padding: 0;
         }
-
         nav li {
             margin: 0;
         }
-
         nav li a {
             display: inline-flex;
             align-items: center;
@@ -57,7 +50,6 @@
             font-weight: 600;
             transition: background-color 0.2s ease, transform 0.2s ease;
         }
-
         nav li a:hover,
         nav li a:focus {
             background-color: rgba(255, 255, 255, 0.12);

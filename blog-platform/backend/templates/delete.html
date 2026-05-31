@@ -220,12 +220,12 @@
                     </div>
                 </div>  
             </section>
-            <div style="display: flex; flex-direction: row; width: 100%;">
+            <div style="display: flex; flex-direction: row; width: 100%; gap: 20px;">
                 <div class="dashboard-grid">
                     <section class="panel">
                         <h2>Delete Post</h2>
                         {% for post in posts %}
-                        <form method="POST" action="/delete">
+                        <form method="POST" action="/delete_post">
                             <input type="hidden" name="post_id" value="{{ post[0] }}">
                             <p>Titled "{{ post[2] }}"?</p>
                             <p>Author ID: {{ post[1] }}</p>
@@ -244,7 +244,7 @@
                     <section class="panel">
                         <h2>Delete User</h2>
                         {% for user in users %}
-                        <form method="POST" action="/delete">
+                        <form method="POST" action="/delete_user">
                             <input type="hidden" name="user_id" value="{{ user[0] }}">
                             <p>Username: {{ user[1] }}</p>
                             <p>Email: {{ user[2] }}</p>

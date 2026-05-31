@@ -13,17 +13,14 @@
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-
         h2 {
             font-size: 2rem;
             text-align: center;
         }
-
         h3 {
             font-size: 1.5rem;
             text-align: center;
         }
-
         form {
             width: 70%;
             background: #ffffff;
@@ -31,13 +28,11 @@
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-
         label {
             display: block;
             margin-bottom: 5px;
             font-weight: 600;
         }
-
         input[type="password"] {
             width: 100%;
             padding: 10px;
@@ -45,7 +40,6 @@
             border: 1px solid #d1d5db;
             border-radius: 4px;
         }
-
         button {
             background-color: #3b82f6;
             color: white;
@@ -54,15 +48,12 @@
             border-radius: 4px;
             cursor: pointer;
         }
-
         button:hover {
             background-color: #2563eb;
         }
-
         #settings-description {
             text-align: center;
         }
-
         #delete-account-section, #password-section {
             display: flex;
             justify-content: center;
@@ -80,13 +71,11 @@
             <p id="settings-description">Manage your account settings here.</p>
             <div id="password-section">
                 <h3>Change Password</h3>
-                <form method="POST" action="/settings">
+                <form method="POST" action="/change_password">
                     <label for="current_password">Current Password:</label><br>
                     <input type="password" id="current_password" name="current_password" required><br><br>
-
                     <label for="new_password">New Password:</label><br>
                     <input type="password" id="new_password" name="new_password" required><br><br>
-
                     <button type="submit">Update Password</button>
                 </form>
             </div>
