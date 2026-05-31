@@ -72,6 +72,7 @@
             <div id="password-section">
                 <h3>Change Password</h3>
                 <form method="POST" action="/change_password">
+                    <input type="hidden" name="user_id" value="{{ user[0][0] }}">
                     <label for="current_password">Current Password:</label><br>
                     <input type="password" id="current_password" name="current_password" required><br><br>
                     <label for="new_password">New Password:</label><br>
@@ -82,6 +83,7 @@
             <div id="delete-account-section">
                 <h3>Delete Account</h3>
                 <form method="POST" action="/delete_account">
+                    <input type="hidden" name="user_id" value="{{ user[0][0] }}">
                     <p>Warning: This action cannot be undone.</p>
                     <button type="submit">Delete Account</button>
                 </form>

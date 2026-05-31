@@ -49,8 +49,11 @@ def settings():
     """
     if not session.get("admin") or not session.get("admin_id"):
         return redirect("/")
+    
+    cursor.execute("SELECT id, username, email FROM admins WHERE id=%s", (session.get("admin_id")))
+    user = cursor.fetchall()
 
-    return render_template("settings.html")
+    return render_template("settings.html", user=user)
 
 @app.route('/delete', methods=["GET", "POST"])
 def delete():
@@ -110,15 +113,29 @@ def change_password():
     """
     Handle password change.
     """
-    pass
+    if not session.get("admin") or not session.get("admin_id"):
+        return redirect("/")
+    if request.method == "POST":
+        pass
+    
+    return redirect("/settings")
 
 @app.route('/delete_account', methods=["GET", "POST"])
 def delete_account():
     """
     Handle account deletion.
     """
-    pass
-
+    if not session.get("admin") or not session.get("admin_id"):
+        return redirect("/")
+    if request.method == "POST":
+        user_id = request.form.get("user_id")
+        cursor.execute("SET FOREIGN_KEY_CHECKS=0")    
+        cursor.execute("DELETE FROM admins WHERE id=%s", (user_id))
+        connection.commit()
+        session.clear()
+        return redirect("/")
+    return redirect("/")
+    
 @app.route('/login', methods=["GET", "POST"])
 def login():
     """
